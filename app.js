@@ -3,13 +3,16 @@ const express = require("express");
 const dotenv = require("dotenv");
 const colors = require("colors");
 
-// const cookieParser = require("cookie-parser");
+// Load env vars
+dotenv.config({ path: "./config/config.env" });
+
+const cookieParser = require("cookie-parser");
 const cookieSession = require("cookie-session");
 
 const passport = require("passport");
 const cors = require("cors");
 
-// custome
+// custome Middleware
 const errorHandler = require("./middleware/error");
 const connectDB = require("./config/db");
 const passportSetp = require("./utils/passport");
@@ -19,9 +22,6 @@ const auth = require("./routes/auth");
 const authSocal = require("./routes/authSocal");
 const product = require("./routes/product");
 
-// Load env vars
-dotenv.config({ path: "./config/config.env" });
-
 // Connect to database
 connectDB();
 
@@ -30,20 +30,18 @@ connectDB();
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 app.use(
   cookieSession({
     name: "session",
-    keys: ["youcompare"],
+    keys: ["Catrisian"],
     maxAge: 24 * 60 * 60 * 100,
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-//cookieParser
-// app.use(cookieParser());
 
 // Enable CORS
 app.use(
@@ -59,7 +57,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routers
 app.use("/api/v1/auth", auth);
-app.use("/auth", authSocal);
+// app.use("/auth", authSocal);
 
 // product
 app.use("/api/product", product);

@@ -1,4 +1,4 @@
-const Products = require("../models/Products");
+const Product = require("../models/Products");
 const asyncHandler = require("../middleware/async");
 
 /**
@@ -6,8 +6,12 @@ const asyncHandler = require("../middleware/async");
  * @route GET /api/auto/insurer
  * @access Private
  */
+// exports.getAllProduct = async (req, res) => {
+//   const Products = await Product.find({});
+//   res.status(200).json({ oaky: Products });
+// };
 exports.getAllProduct = asyncHandler(async (req, res, next) => {
-  const Products = await Products.find({});
+  const Products = await Product.find({});
   return res.status(200).json({ Products });
 });
 
@@ -19,9 +23,10 @@ exports.getAllProduct = asyncHandler(async (req, res, next) => {
 exports.getProduct = asyncHandler(async (req, res, next) => {
   const _id = req.params.id;
   // sending just company-names as titles
-  const product = await Products.findById({ _id });
+  const product = await Product.findById({ _id });
   return res.status(200).json({ product });
 });
+
 
 /**
  * @desc Add Insurer Details
@@ -29,7 +34,9 @@ exports.getProduct = asyncHandler(async (req, res, next) => {
  * @access Private
  */
 exports.addProduct = asyncHandler(async (req, res, next) => {
-  const product = await Products.create(req.body);
+  req.body.user = req.user.id   
+
+  const product = await Product.create(req.body);
   return res.status(200).json({ product });
 });
 
@@ -40,7 +47,7 @@ exports.addProduct = asyncHandler(async (req, res, next) => {
  */
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   const _id = req.params.id;
-  const product = await Products.findByIdAndUpdate(_id, req.body, {
+  const product = await Product.findByIdAndUpdate(_id, req.body, {
     new: true,
     runValidators: true,
   });
@@ -54,6 +61,6 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
  */
 exports.deleteProduct = asyncHandler(async (req, res, next) => {
   const _id = req.params.id;
-  const product = await Products.findByIdAndDelete(_id);
+  const product = await Product.findByIdAndDelete(_id);
   return res.status(200).json({ product });
 });

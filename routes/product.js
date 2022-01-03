@@ -9,11 +9,15 @@ const {
   deleteProduct,
 } = require("../controllers/product");
 
+// middleware
+const { protect } = require("../middleware/auth");
+
 router.get("/Products", getAllProduct);
 router.get("/Products/:id", getProduct);
 
-router.post("/product", addProduct);
-router.put("/product", updateProduct);
-router.delete("/product", deleteProduct);
+//protected routes
+router.post("/", protect, addProduct);
+router.put("/", updateProduct);
+router.delete("/", deleteProduct);
 
 module.exports = router;

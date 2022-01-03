@@ -20,13 +20,9 @@ const { protect } = require("../middleware/auth");
 
 router.post("/register", register);
 router.post("/login", login);
-
-// router.get("/logout", logout);
-// router.get("/me", protect, getMe);
-// router.put("/updatedetails", protect, updateDetails);
-// router.put("/updatepassword", protect, updatePassword);
-// router.post("/forgotpassword", forgotPassword);
-// router.put("/resetpassword/:resettoken", resetPassword);
+router.get("/getMe", protect, getMe);
+router.put("/updateDetails", protect, updateDetails);
+router.get("/forgotPassword", forgotPassword);
 
 // google auth routes
 
@@ -52,15 +48,5 @@ router.get("/logout", (req, res) => {
   req.logout();
   res.redirect(CLIENT_URL);
 });
-
-router.get("/google", passport.authenticate("google", { scope: ["profile"] }));
-
-router.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
-);
 
 module.exports = router;
